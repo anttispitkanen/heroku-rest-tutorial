@@ -1,10 +1,12 @@
+'use strict';
+
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var mongodb = require('mongodb');
 var ObjectID = mongodb.ObjectID;
 
-var CONTACTS_COLLECTION = 'contacs';
+var CONTACTS_COLLECTION = 'contacts';
 
 var app = express();
 app.use(express.static(__dirname + '/public'));
@@ -58,7 +60,7 @@ function handleError(res, reason, message, code) {
 */
 
 /*
-* "/contacs"
+* "/contacts"
 *   GET: find all contacts
 *   POST: creata new contact
 */
@@ -100,7 +102,7 @@ app.post('/contacts', function(req, res) {
 app.get('/contacts/:id', function(req, res) {
     db.collection(CONTACTS_COLLECTION).findOne( { _id: new ObjectID(req.params.id) }, function(err, doc) {
         if (err) {
-            handleError(res, err.message, 'Failed to get contact.');
+            handleError(res, err.message, 'Failed to get contact');
         } else {
             res.status(200).json(doc);
         }
@@ -111,10 +113,10 @@ app.put('/contacts/:id', function(req, res) {
     var updateDoc = req.body;
     delete updateDoc._id;
 
-    db.collection(CONTACTS_COLLECTION).updateOne( { _id: new ObjectID(req.params.id) }, updateDoc, function(err, doc) {
-        if (err) (
-            handleError(res, err.message, 'Failed to update contact.');
-        ) else {
+    db.collection(CONTACTS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+        if (err) {
+            handleError(res, err.message, 'Failed to update contact');
+        } else {
             res.status(204).end();
         }
     });
